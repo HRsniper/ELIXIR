@@ -40,6 +40,11 @@ iex> string = :world
 iex> "hellö #{string}"
 saida> "hellö world"
 
+# A concatenação de strings usa o operador <>:
+iex> name = "Sean"
+iex> "Hello " <> name
+saida> "Hello Sean"
+
 # Você pode imprimir uma string usando a IO.puts/1 função do módulo IO:
 
 iex> IO.puts "hello\nworld"
