@@ -1,4 +1,4 @@
-Strings em Elixir são nada mais que uma sequência de bytes. <<97>> == "a" <<122>> == "z"
+# Strings em Elixir são nada mais que uma sequência de bytes. <<97>> == "a" <<122>> == "z"
 iex> string = <<104,101,108,108,111>>
 # "hello"
 iex> string <> <<0>>
@@ -153,55 +153,56 @@ split(binary)
 # As divisões não ocorrem em espaços em branco ininterruptos.
 
 split(string, pattern, options \\ [])
-Divides a string into parts based on a pattern.
+# Divide uma corda em partes com base em um padrão.
 
 split_at(string, position)
-Splits a string into two at the specified offset. When the offset given is negative, location is counted from the end of the string.
+# Divide uma string em duas no deslocamento especificado. Quando o deslocamento fornecido é negativo,
+# a localização é contada a partir do final da string.
 
 splitter(string, pattern, options \\ [])
-Returns an enumerable that splits a string on demand.
+# Retorna um enumerable que divide uma string sob demanda.
 
 starts_with?(string, prefix)
-Returns true if string starts with any of the prefixes given.
+# Retorna verdadeiro se a string começar com qualquer um dos prefixos fornecidos.
 
 to_atom(string)
-Converts a string to an atom.
+# Converte uma string em um átomo.
 
 to_charlist(string)
-Converts a string into a charlist.
+# Converte uma string em uma charlist.
 
 to_existing_atom(string)
-Converts a string to an existing atom.
+# Converte uma string em um átomo existente.
 
 to_float(string)
-Returns a float whose text representation is string.
+# Retorna um float cuja representação de texto é string.
 
 to_integer(string)
-Returns an integer whose text representation is string.
+# Retorna um inteiro cuja representação de texto é string.
 
 to_integer(string, base)
-Returns an integer whose text representation is string in base base.
+# Retorna um inteiro cuja representação de texto é uma string na base.
 
 trim(string)
-Returns a string where all leading and trailing Unicode whitespaces have been removed.
+# Retorna uma string em que todos os espaços em branco Unicode iniciais e finais foram removidos.
 
 trim(string, to_trim)
-Returns a string where all leading and trailing to_trim characters have been removed.
+# Retorna uma string onde todos os caracteres to_trim iniciais e finais foram removidos.
 
 trim_leading(string)
-Returns a string where all leading Unicode whitespaces have been removed.
+# Retorna uma string em que todos os espaços em branco do Unicode foram removidos.
 
 trim_leading(string, to_trim)
-Returns a string where all leading to_trim characters have been removed.
+# Retorna uma string onde todos os caracteres to_trim foram removidos.
 
 trim_trailing(string)
-Returns a string where all trailing Unicode whitespaces has been removed.
+# Retorna uma string em que todos os espaços em branco do Unicode foram removidos.
 
 trim_trailing(string, to_trim)
-Returns a string where all trailing to_trim characters have been removed.
+# Retorna uma string onde todos os caracteres to_trim finais foram removidos.
 
 upcase(string, mode \\ :default)
-Converts all characters in the given string to uppercase according to mode.
+# Converte todos os caracteres na string fornecida em maiúsculas de acordo com o modo.
 
 valid?(string)
-Checks whether string contains only valid characters.
+# Verifica se a string contém apenas caracteres válidos.
