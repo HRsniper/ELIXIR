@@ -24,11 +24,13 @@ defmodule Example.MixProject do
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
       {:phoenix, "~> 1.1 or ~> 1.2"},
+      {:poison, "~> 4.0"},
       {:phoenix_html, "~> 2.3"},
       {:cowboy, "~> 1.0", only: [:dev, :test]},
       {:slime, "~> 0.14"},
       {:earmark, "~> 1.2", only: :dev},
-      {:ex_doc, "~> 0.19", only: :dev}
+      {:ex_doc, "~> 0.19", only: :dev},
+      {:tzdata, "~> 1.1"}
     ]
   end
 end
