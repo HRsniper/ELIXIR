@@ -30,7 +30,9 @@ defmodule Example.MixProject do
       {:slime, "~> 0.14"},
       {:earmark, "~> 1.2", only: :dev},
       {:ex_doc, "~> 0.19", only: :dev},
-      {:tzdata, "~> 1.1"}
+      {:tzdata, "~> 1.1"},
+      # {:png, github: "yuce/png"}
+      {:png, "~> 0.2.1"}
     ]
   end
 end
