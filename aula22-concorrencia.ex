@@ -277,7 +277,7 @@ iex> defmodule Example do
         x * 2
       end
     end
-iex> task = Task.async(Example, :double, [10000])
+iex> task3 = Task.async(Example, :double, [10000])
 # %Task{
 #   owner: #PID<0.101.0>,
 #   pid: #PID<0.168.0>,
@@ -286,5 +286,23 @@ iex> task = Task.async(Example, :double, [10000])
 
 # Realizar algum trabalho sem atrapalhar o que ja esta sendo feito
 
-iex> Task.await(task) # await 10s
+iex> Task.await(task3) # await 10s
 # 20000
+
+iex> Task.yield(task2)
+# {:ok, 11}
+iex> Task.yield(task4) # aguardou 10s e parou
+# nil
+iex> Task.yield(task4) # proximo yield executou
+# {:ok, 20000}
+
+iex> case Task.yield(task4, 5000) || Task.shutdown(task4) do
+  {:ok, result} ->
+    result
+
+  nil ->
+    IO.puts("Failed to get a result in 5000ms")
+    nil
+end
+# Failed to get a result in 5000ms
+# nil
