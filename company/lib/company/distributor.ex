@@ -3,6 +3,6 @@ defmodule Company.Distributor do
 
   schema "distributors" do
     field(:name, :string)
-    belongs_to(:movies, Company.Movie)
+    belongs_to(:movie, Company.Movie, references: :id)
   end
 end

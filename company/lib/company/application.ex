@@ -10,7 +10,8 @@ defmodule Company.Application do
     children = [
       # Starts a worker by calling: Company.Worker.start_link(arg)
       # {Company.Worker, arg}
-      {Company.Repo, []}
+      Company.Repo,
+      # {Company.Repo, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

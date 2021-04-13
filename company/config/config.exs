@@ -6,5 +6,4 @@ config :company, Company.Repo,
   password: "postgres",
   hostname: "localhost"
 
-config :company,
-  ecto_repos: [Company.Repo]
+config :company, ecto_repos: [Company.Repo]
