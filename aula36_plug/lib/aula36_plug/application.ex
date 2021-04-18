@@ -11,7 +11,7 @@ defmodule Aula36Plug.Application do
     children = [
       # Starts a worker by calling: Aula36Plug.Worker.start_link(arg)
       # {Aula36Plug.Worker, arg}
-      {Plug.Cowboy, scheme: :http, plug: Aula36Plug.MyPlug, options: [port: 8080]}
+      {Plug.Cowboy, scheme: :http, plug: Aula36Plug.Router, options: [port: 8080]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

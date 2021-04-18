@@ -125,3 +125,58 @@ $ mix run --no-halt
 
 # o body do site sera
 Hello World!
+
+# Plug.Router
+# Para a maioria das aplicações, como um site web ou uma API REST, você irá querer um router para orquestrar
+# as requisições de diferentes paths e verbos HTTP, para diferentes manipuladores.
+# Plug fornece um router para fazer isso.
+
+# em lib/aula36_plug/router.ex
+defmodule Aula36Plug.Router do
+  use Plug.Router
+
+  plug :match
+  plug :dispatch
+
+  get "/" do
+    send_resp(conn, 200, "Welcome")
+  end
+
+  match _ do
+    send_resp(conn, 404, "Oops!")
+  end
+end
+
+
+# plug (plug, opts \\ []) (macro)
+  # Um macro que armazena um novo plug. opts serão passados e não serão alterados para o novo plugue.
+  # Este macro não adiciona nenhuma proteção ao adicionar o novo plugue ao pipeline;
+  # para adicionar plugs com protetores, consulte compile/3.
+
+# get(path, options, contents \\ [])(macro)
+  # Despacha para o caminho apenas se a solicitação for uma solicitação GET.
+
+# match(path, options, contents \\ [])(macro)
+  # API principal para definir rotas.
+  # Ele aceita uma expressão que representa o caminho e muitas opções que permitem a configuração da correspondência.
+  # A rota pode ser despachada para um corpo de função ou um módulo de Plug.
+
+# Incluímos alguns macros através de ´use Plug.Router´,
+# e em seguida, configuramos dois Plugs nativos: :match e :dispatch.
+# definimos duas rotas, uma para mapear requisições GET para a raiz ("/")
+# e a segunda para mapear todos as outras requisições, e então retornar um 404 com a mensagem.
+
+# Os métodos HTTP suportados são get, post, put, patch, delete e options.
+
+# em lib/aula36_plug/application.ex, precisamos adicionar o Aula36Plug.Router na árvore de supervisores.
+# então Trocamos o Aula36Plug.MyPlug para o router Aula36Plug.Router.
+children = [
+  {Plug.Cowboy, scheme: :http, plug: Aula36Plug.Router, options: [port: 8080]}
+]
+
+# para o servidor se estive rodando
+# inicie o servidor
+$ mix run --no-halt
+
+http://127.0.0.1:8080 vai retornar ´Welcome´ no body.
+http://localhost:8080/wet45ymy, ou qualquer outro path. vai retornar ´Oops!´ com uma resposta 404.
