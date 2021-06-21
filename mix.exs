@@ -3,7 +3,7 @@ defmodule ElixirCourse.MixProject do
 
   def project do
     [
-      app: :elixir_ourse,
+      app: :elixir_course,
       version: "0.1.0",
       elixir: "~> 1.11",
       deps: deps()
@@ -11,12 +11,14 @@ defmodule ElixirCourse.MixProject do
   end
 
   def application do
-
+    [
+      extra_applications: [:logger]
+    ]
   end
 
   defp deps do
     [
-      {:credo, "~> 1.5",  runtime: false}
+      {:credo, "~> 1.5", runtime: false}
     ]
   end
 end
