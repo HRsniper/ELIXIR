@@ -10,9 +10,9 @@ use Mix.Config
 config :aula42_auth_me,
   ecto_repos: [Aula42AuthMe.Repo]
 
-config :aula42_auth_me, Aula42AuthMe.Guardian,
+config :aula42_auth_me, Aula42AuthMe.UserManager.Guardian,
   issuer: "aula42_auth_me",
-  secret_key: ""
+  secret_key: "EpdFNi/osIdlE+2ddvIN6jXpVV76ZmiuPzDweojvXUM+FU7cma71GaLiIgh6h4PT"
 
 # Configures the endpoint
 config :aula42_auth_me, Aula42AuthMeWeb.Endpoint,
