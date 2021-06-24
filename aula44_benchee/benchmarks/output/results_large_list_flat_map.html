@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>Benchee Report</title>
+  <meta charset="utf-8">
+  <meta http-equiv="content-type" content="text/html; charset=utf8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+    <link rel="stylesheet" type="text/css" href="assets/stylesheets/benchee.css">
+    <link rel="stylesheet" type="text/css" href="assets/fontello/css/fontello.css">
+  
+</head>
+
+  <body>
+
+    <div class="header">
+  <h1>benchee report</h1>
+  
+  <span class="input-label">
+    large list
+  </span>
+
+
+  <span class="version-note">
+  <a href="javascript:toggleSystemDataInfo();" title="Click to toggle system info">System info</a>
+</span>
+
+</div>
+
+
+    <article id="system-info" class="benchee-systeminfo" >
+  <h3>System info</h3>
+  <ul class="benchee-systeminfo-list">
+    <li>Elixir: 1.12.1</li>
+    <li>Erlang: 22.3</li>
+    <li>Operating system: Windows</li>
+    <li>Available memory: 3.50 GB</li>
+    <li>CPU Information: Pentium(R) Dual-Core  CPU      E5500  @ 2.80GHz</li>
+    <li>Number of Available Cores: 2</li>
+  </ul>
+</article>
+
+
+    
+      <article>
+        <h2>
+          <a name="run_time" href="#run_time">flat_map Run Time</a>
+          <a href="https://github.com/PragTob/benchee_html/wiki/Chart-Types#individual">
+            <i
+              class="benchee-help-icon icon-question-circle-o"
+              title="Graphs showing the individual run time distribution for flat_map.
+  Run Times Histogram shows the distribution of occurrences of specific run times in buckets.
+  Raw Run Times shows all individual recorded run times in the order they were recorded in."
+            ></i>
+          </a>
+        </h2>
+
+        <section>
+          <table>
+  <thead>
+    <tr>
+      <th class="text-left">Name</th>
+      
+        <th>Iterations per Second</th>
+      
+      <th>Average</th>
+      <th>Deviation</th>
+      <th>Median</th>
+      <th>Mode</th>
+      <th>Minimum</th>
+      <th>Maximum</th>
+      <th>Sample size</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+      
+      <tr>
+        
+          <td class="text-left">flat_map</td>
+        
+        
+          <td>1.77</td>
+          <td>566.00 ms</td>
+          <td>±42.16%</td>
+          <td>562.00 ms</td>
+          <td>none</td>
+          <td>141.00 ms</td>
+          <td>828.00 ms</td>
+        
+        <td>9</td>
+      </tr>
+    
+  </tbody>
+</table>
+
+        </section>
+
+        <section class="benchee-plot-container">
+          <div id="run-times-histogram" class="plot"></div>
+        </section>
+        <section class="benchee-plot-container">
+          <div id="raw-run-times" class="plot"></div>
+        </section>
+      </article>
+    
+
+    
+      <article>
+        <h2>
+          <a name="memory" href="#memory">flat_map Memory</a>
+          <a href="https://github.com/PragTob/benchee_html/wiki/Chart-Types#individual">
+            <i
+              class="benchee-help-icon icon-question-circle-o"
+              title="Graphs showing the individual memory usage distribution for flat_map.
+  Run Times Histogram shows the distribution of occurrences of specific run times in buckets.
+  Raw Run Times shows all individual recorded run times in the order they were recorded in."
+            ></i>
+          </a>
+        </h2>
+
+        <section>
+          <table>
+  <thead>
+    <tr>
+      <th class="text-left">Name</th>
+      
+      <th>Average</th>
+      <th>Deviation</th>
+      <th>Median</th>
+      <th>Mode</th>
+      <th>Minimum</th>
+      <th>Maximum</th>
+      <th>Sample size</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+      
+      <tr>
+        
+          <td class="text-left">flat_map</td>
+        
+        
+          <td>61.04 MB</td>
+          <td>±0.00%</td>
+          <td>61.04 MB</td>
+          <td>none</td>
+          <td>61.04 MB</td>
+          <td>61.04 MB</td>
+        
+        <td>1</td>
+      </tr>
+    
+  </tbody>
+</table>
+
+        </section>
+
+        
+      </article>
+    
+
+    <footer>
+      <a href="https://github.com/PragTob/benchee" target="blank">benchee version: 1.0.1 </a>
+<br/>
+<a href="https://github.com/PragTob/benchee_html" target="blank">benchee_html version: 1.0.0</a>
+
+
+    </footer>
+
+    
+  <script src="assets/javascripts/plotly-1.30.1.min.js"></script>
+  <script src="assets/javascripts/benchee.js"></script>
+
+
+
+    <script>
+      var scenario = {"name":"flat_map","job_name":"flat_map","input_name":"large list","run_time_data":{"statistics":{"absolute_difference":100090909.09090906,"average":565999969.0,"ips":1.7667845490641714,"maximum":827999969.0,"median":561999969.0,"minimum":140999969.0,"mode":null,"percentiles":{"50":561999969.0,"99":827999969.0},"relative_less":0.8231609283163952,"relative_more":1.2148292825866898,"sample_size":9,"std_dev":238602703.2537561,"std_dev_ips":0.7448049338562416,"std_dev_ratio":0.4215595694736798},"samples":[140999969.0,827999969.0,561999969.0,780999969.0,484999969.0,546999969.0,264999969.0,734999969.0,749999969.0]},"memory_usage_data":{"statistics":{"absolute_difference":-15999936.0,"average":63999872.0,"ips":null,"maximum":63999872,"median":63999872.0,"minimum":63999872,"mode":null,"percentiles":{"50":63999872.0,"99":63999872.0},"relative_less":1.249999499999,"relative_more":0.800000320000768,"sample_size":1,"std_dev":0,"std_dev_ips":null,"std_dev_ratio":0.0},"samples":[63999872]},"tag":null};
+
+      var inputHeadline = " (large list)"
+
+      
+        drawRunTimeHistogram(scenario, inputHeadline);
+        drawRawRunTimeChart(scenario, inputHeadline);
+      
+
+      
+        if (scenario.memory_usage_data.statistics.std_dev !== 0) {
+          drawMemoryHistogram(scenario, inputHeadline);
+          drawRawMemoryChart(scenario, inputHeadline);
+        };
+      
+    </script>
+  </body>
+</html>
