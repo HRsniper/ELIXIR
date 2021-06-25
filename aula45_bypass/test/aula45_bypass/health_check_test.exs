@@ -25,4 +25,10 @@ defmodule Aula45Bypass.HealthCheckTest do
 
     assert {:error, "HTTP Status 500"} = HealthCheck.ping("http://localhost:#{bypass.port}")
   end
+
+  test "request with unexpected outage", %{bypass: bypass} do
+    Bypass.down(bypass)
+
+    assert {:error, :econnrefused} = HealthCheck.ping("http://localhost:#{bypass.port}")
+  end
 end

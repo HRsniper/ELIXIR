@@ -128,6 +128,8 @@ $ mix test
 
 # agora adicionamos casos de teste para erros. Podemos começar com um teste muito parecido com nosso primeiro,
 # com algumas pequenas mudanças: retornando 500 como código de status e afirmando que a tupla {:error, reason} é retornada.
+# em test/aula45_bypass/health_check_test.exs
+...
 test "request with HTTP 500 response", %{bypass: bypass} do
   Bypass.expect(bypass, fn conn ->
     Plug.Conn.resp(conn, 500, "Bypass Response 500")
@@ -135,3 +137,151 @@ test "request with HTTP 500 response", %{bypass: bypass} do
 
   assert {:error, "HTTP Status 500"} = HealthCheck.ping("http://localhost:#{bypass.port}")
 end
+...
+
+# Não há nada de especial para este caso de teste, então vamos passar para o próximo:
+# interrupções inesperadas do servidor, estas são as chamadas com as quais estamos mais preocupados.
+# Para fazer isso usaremos 'Bypass.down/1' ao invés 'Bypass.expect/2' para desligar a conexão.
+# em test/aula45_bypass/health_check_test.exs
+...
+test "request with unexpected outage", %{bypass: bypass} do
+  Bypass.down(bypass)
+
+  assert {:error, :econnrefused} = HealthCheck.ping("http://localhost:#{bypass.port}")
+end
+...
+
+# Se executarmos nossos testes veremos tudo passando conforme esperado! Com nosso módulo HealthCheck testado,
+# podemos seguir em frente e testá-lo juntamente como nosso scheduler baseado no GenServer.
+
+# Vários hosts externos
+# Para nosso projeto manteremos as estruturas do scheduler e usaremos 'Process.send_after/3'
+# para alimentar nossas verificações reincidentes. # modulo process (https://hexdocs.pm/elixir/Process.html)
+# Nosso scheduler necessita de três opções: a coleção de sites, o intervalo de nossas verificações,
+# e o módulo que implementa ping/1.
+
+# Ao passar no nosso módulo, separamos nossa funcionalidade e o nosso GenServer,
+# permitindo-nos testar cada um em isolamento.
+
+# em lib\aula45_bypass\scheduler.ex
+defmodule Aula45Bypass.Scheduler do
+
+  require Logger
+  alias Aula45Bypass.HealthCheck
+
+  def init(opts) do
+    sites = Keyword.fetch!(opts, :sites)
+    interval = Keyword.fetch!(opts, :interval)
+    health_check = Keyword.get(opts, :health_check, HealthCheck)
+
+    Process.send_after(self(), :check, interval)
+
+    {:ok, {health_check, sites}}
+  end
+end
+
+# Agora precisamos definir a função 'handle_info/2' para a mensagem :check enviada para 'send_after/2'.
+# Para manter as coisas simples vamos passar nossos sites para a 'HealthCheck.ping/1'
+# e logar nossos resultados com 'Logger.info' ou 'Logger.error' no caso de erros.
+
+# em lib\aula45_bypass\scheduler.ex
+...
+def handle_info(:check, {health_check, sites}) do
+  sites
+  |> health_check.ping()
+  |> Enum.each(&report/1)
+
+  {:noreply, {health_check, sites}}
+end
+
+defp report({:ok, body}), do: Logger.info(body)
+
+defp report({:error, reason}) do
+  reason
+  |> to_string()
+  |> Logger.error()
+end
+...
+
+# Conforme discutido, passamos nossos sites para a 'HealthCheck.ping/1' então iteramos os resultados com 'Enum.each/2'
+# aplicando nossa função 'report/1' em cada uma delas. Com essas funções nosso scheduler está pronto
+# e podemos nos concentrar em testá-lo.
+# em test/aula45_bypass/scheduler_test.exs
+defmodule Aula45Bypass.SchedulerTest do
+  use ExUnit.Case
+
+  import ExUnit.CaptureLog
+
+  alias Aula45Bypass.Scheduler
+
+  defmodule TestCheck do
+    def ping(_sites), do: [{:ok, "pong"}, {:error, "HTTP Status 404"}]
+  end
+
+  test "health checks are run and results logged" do
+    opts = [health_check: TestCheck, interval: 1, sites: ["http://example.com", "http://example.org"]]
+
+    output =
+      capture_log(fn ->
+        {:ok, _pid} = GenServer.start_link(Scheduler, opts)
+        :timer.sleep(10)
+      end)
+
+    assert output =~ "pong"
+    assert output =~ "HTTP Status 404"
+  end
+end
+
+# Confiamos em uma implementação de teste de nossos health checks com TestCheck juntamente
+# com CaptureLog.capture_log/1 para afirmar que as mensagens apropriadas são logadas.
+
+$ mix test
+
+# Agora trabalhamos nos módulos Scheduler e HealthCheck, vamos escrever um teste de integração
+# para verificar tudo funcionando junto. Precisaremos do Bypass para este teste
+# e teremos que tratar múltiplas chamadas com Bypass por teste.
+
+# Lembra do bypass.port? Quando precisamos simular múltiplos sites, a opção :port vem a calhar.
+# Como você provavelmente adivinhou, podemos criar múltiplas conexões Bypass cada uma com uma porta diferente,
+# estas que simularão sites independentes.
+
+# vamos atualizar nosso arquivo test\aula45_bypass_test.exs
+defmodule Aula45BypassTest do
+  use ExUnit.Case
+
+  import ExUnit.CaptureLog
+
+  alias Aula45Bypass.Scheduler
+
+  test "sites are checked and results logged" do
+    bypass_one = Bypass.open(port: 1234)
+    bypass_two = Bypass.open(port: 1337)
+
+    Bypass.expect(bypass_one, fn conn ->
+      Plug.Conn.resp(conn, 500, "Server Error")
+    end)
+
+    Bypass.expect(bypass_two, fn conn ->
+      Plug.Conn.resp(conn, 200, "pong")
+    end)
+
+    opts = [interval: 1, sites: ["http://localhost:1234", "http://localhost:1337"]]
+
+    output =
+      capture_log(fn ->
+        {:ok, _pid} = GenServer.start_link(Scheduler, opts)
+        :timer.sleep(10)
+      end)
+
+    assert output =~ "[info]  pong"
+    assert output =~ "[error] HTTP Status 500"
+  end
+end
+
+# Não deve haver nada de tão surpreendente no teste acima. Ao invés de criar uma simples conexão Bypass
+# no setup, estamos criando duas no teste e especificando suas portas como 1234 e 1337.
+# Em seguida, vemos nossas chamadas Bypass.expect/2 e finalmente o mesmo código que temos
+# no SchedulerTest para iniciar o scheduler e afirmar que logamos as mensagens apropriadas.
+
+# É isso aí! Construímos um utilitário para nos manter informados se houver qualquer problema
+# em nossos domínios e aprendemos como usar o Bypass para escrever melhores testes com serviços externos.
