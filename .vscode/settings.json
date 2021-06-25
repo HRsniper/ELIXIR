@@ -1,3 +1,6 @@
 {
-  "elixirLS.projectDir": "./"
+  "elixirLS.projectDir": "./",
+  "cSpell.words": [
+    "padrao"
+  ]
 }
